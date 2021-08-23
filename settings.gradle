@@ -1,0 +1,6 @@
+
+rootProject.name = 'krymmenos'
+
+include ':krymmenos:core'
+project(':krymmenos:core').name = 'krymmenos-core'
+project(':krymmenos:krymmenos-core').projectDir = file('core')
