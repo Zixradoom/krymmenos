@@ -24,7 +24,8 @@ public class StringTable extends SectionDataTable< StringTable.Entry > {
   
   public StringTable.Entry newEntry ( int offset, int size ) {
     StringTable.Entry entry = newEntry ();
-    //entry
+    entry.setOffset ( offset );
+    entry.setSize ( size );
     return entry;
   }
   

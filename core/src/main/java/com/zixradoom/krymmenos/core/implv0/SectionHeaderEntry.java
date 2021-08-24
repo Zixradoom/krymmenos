@@ -15,18 +15,19 @@ public final class SectionHeaderEntry extends AbstractDataTableEntry {
   public static final int OFFSET_INFO = OFFSET_LINK + Short.BYTES;
   public static final int OFFSET_OFFSET = OFFSET_INFO + Integer.BYTES;
   public static final int OFFSET_SIZE = OFFSET_OFFSET + Long.BYTES;
-  public static final int OFFSET_END = OFFSET_SIZE + Long.BYTES;
+  public static final int OFFSET_ENTRY_SIZE = OFFSET_SIZE + Long.BYTES;
+  public static final int OFFSET_END = OFFSET_ENTRY_SIZE + Integer.BYTES;
   
   protected SectionHeaderEntry ( int index, Supplier< ByteBuffer > bufferGetter, IntSupplier entrySizeGetter ) {
     super ( index, bufferGetter, entrySizeGetter );
   }
   
   public int getNameIndex () {
-    return buffer ().getInt ( start () + OFFSET_TYPE );
+    return buffer ().getInt ( start () + OFFSET_NAME_INDEX );
   }
   
   public void setNameIndex ( int index ) {
-    buffer ().putInt ( start () + OFFSET_TYPE, index );
+    buffer ().putInt ( start () + OFFSET_NAME_INDEX, index );
   }
   
   public int getTypeRaw () {
@@ -35,6 +36,15 @@ public final class SectionHeaderEntry extends AbstractDataTableEntry {
   
   public void setTypeRaw ( short rawType ) {
     buffer ().putShort( start () + OFFSET_TYPE, rawType );
+  }
+  
+  public Type getType () {
+    int type = getTypeRaw ();
+    return Type.valueOf ( type );
+  }
+  
+  public void setType ( Type type ) {
+    setTypeRaw ( (short) type.getCode () );
   }
   
   public int getLink () {
@@ -69,6 +79,14 @@ public final class SectionHeaderEntry extends AbstractDataTableEntry {
     buffer ().putLong ( start () + OFFSET_SIZE, size );
   }
   
+  public int getDataEntrySize () {
+    return buffer ().getInt ( start () + OFFSET_ENTRY_SIZE );
+  }
+  
+  public void setDataEntrySize ( int size ) {
+    buffer ().putInt ( start () + OFFSET_ENTRY_SIZE, size );
+  }
+  
   public static final class Factory implements DataTable.Factory < SectionHeaderEntry > {
 
     @Override
@@ -85,7 +103,8 @@ public final class SectionHeaderEntry extends AbstractDataTableEntry {
   
   public enum Type {
     INVALID(0, "INVD"),
-    BLOB(0x100, "BLOB");
+    BLOB(0x10, "BLOB"),
+    STRING_TABLE(0x20, "STRT");
     
     private final int code;
     private final String mnemonic;
@@ -101,6 +120,17 @@ public final class SectionHeaderEntry extends AbstractDataTableEntry {
     
     public String getMnemonic () {
       return mnemonic;
+    }
+    
+    public static Type valueOf ( int code ) {
+      switch ( code ) {
+      case 0x100:
+        return BLOB;
+      case 0x200:
+        return STRING_TABLE;
+      default:
+        return INVALID;
+      }
     }
   }
 }

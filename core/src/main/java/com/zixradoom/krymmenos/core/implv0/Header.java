@@ -3,6 +3,8 @@ package com.zixradoom.krymmenos.core.implv0;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 
+import com.zixradoom.krymmenos.core.KrymmenosIO;
+
 public final class Header {
   
   public static final int OFFSET_MAGIC = 0;
@@ -20,6 +22,7 @@ public final class Header {
   
   public Header () {
     this ( ByteBuffer.allocate ( OFFSET_END ) );
+    data.putInt ( OFFSET_MAGIC, KrymmenosIO.MAGIC );
   }
   
   public Header ( ByteBuffer data ) {
@@ -63,7 +66,7 @@ public final class Header {
     return data.getShort ( OFFSET_SECTION_HEADER_TABLE_ENTRY_SIZE );
   }
   
-  public void setSectionheaderTableEntrySize ( short size ) {
+  public void setSectionHeaderTableEntrySize ( short size ) {
     data.putShort ( OFFSET_SECTION_HEADER_TABLE_ENTRY_SIZE, size );
   }
   
