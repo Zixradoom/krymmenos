@@ -12,8 +12,9 @@ public final class Header {
   public static final int OFFSET_SECTION_HEADER_TABLE_ENTRY_SIZE = OFFSET_SECTION_HEADER_TABLE_ENTRY_COUNT + Short.BYTES;
   public static final int OFFSET_SECTION_HEADER_TABLE_OFFSET = OFFSET_SECTION_HEADER_TABLE_ENTRY_SIZE + Short.BYTES;
   public static final int OFFSET_SIGNATURE_ALGORITHM = OFFSET_SECTION_HEADER_TABLE_OFFSET + Long.BYTES;
-  public static final int OFFSET_SIGNATURE_OFFSET = OFFSET_SIGNATURE_ALGORITHM + Integer.BYTES;
-  public static final int OFFSET_END = OFFSET_SECTION_HEADER_TABLE_OFFSET + Long.BYTES;
+  public static final int OFFSET_SECTION_HEADER_NAME_INDEX = OFFSET_SIGNATURE_ALGORITHM + Short.BYTES;
+  public static final int OFFSET_SIGNATURE_OFFSET = OFFSET_SECTION_HEADER_NAME_INDEX + Short.BYTES;
+  public static final int OFFSET_END = OFFSET_SIGNATURE_OFFSET + Long.BYTES;
   
   private ByteBuffer data;
   
@@ -64,6 +65,14 @@ public final class Header {
   
   public void setSectionheaderTableEntrySize ( short size ) {
     data.putShort ( OFFSET_SECTION_HEADER_TABLE_ENTRY_SIZE, size );
+  }
+  
+  public int getSectionHeaderNameIndex () {
+    return data.getShort ( OFFSET_SECTION_HEADER_NAME_INDEX );
+  }
+  
+  public void setSectionHeaderNameIndex ( short index ) {
+    data.putShort ( OFFSET_SECTION_HEADER_NAME_INDEX, index );
   }
   
   public long getSectionHeaderTableOffset () {

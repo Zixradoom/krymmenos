@@ -16,6 +16,12 @@ java {
   modularity.inferModulePath = true
   sourceCompatibility = JavaVersion.VERSION_16
   targetCompatibility = JavaVersion.VERSION_16
+  withJavadocJar ()
+  withSourcesJar ()
+}
+
+javadoc {
+  options.links 'https://docs.oracle.com/en/java/javase/16/docs/api/'
 }
 
 repositories {
